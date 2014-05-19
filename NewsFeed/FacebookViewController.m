@@ -51,35 +51,26 @@
 }
 
 - (void) initDatabase {
+    
+    NSString *modelPath = [[NSBundle mainBundle] pathForResource:@"Model" ofType:@"momd"];
+    NSURL *modelURL = [NSURL fileURLWithPath:modelPath];
+    NSPersistentStoreCoordinator *psc = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL]];
+    
+    self.managedContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    [self.managedContext setPersistentStoreCoordinator:psc];
+    
     NSFileManager *filemgr = [NSFileManager defaultManager];
     NSURL *documentsDirectory = [[filemgr URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] firstObject];
     NSString *docName = @"MyDocument";
+    NSError *err;
     NSURL *url = [documentsDirectory URLByAppendingPathComponent:docName];
-    self.managedDocument = [[UIManagedDocument alloc] initWithFileURL:url];
     
-    BOOL fileExists = [filemgr fileExistsAtPath:[url path]];
-    if (fileExists) {
-        [self.managedDocument openWithCompletionHandler:^(BOOL success){
-            if (success)
-                [self documentIsReady];
-            else
-                NSLog(@"Document couldn't be opened");
-        }];
+    if (![psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:@{NSSQLitePragmasOption: @{@"journal_mode": @"delete"}} error:&err]) {
+        NSLog(@"Error occured when creating persistent store : %@", err);
     }
-    else {
-        [self.managedDocument saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
-            if (success)
-                [self documentIsReady];
-            else
-                NSLog(@"Document couldn't be created");
-        }];
-    }
-}
-
-- (void) documentIsReady {
-    if (self.managedDocument.documentState == UIDocumentStateNormal) {
+    else
+    {
         self.documentReady = YES;
-        self.managedContext = self.managedDocument.managedObjectContext;
         [self getData];
     }
 }
@@ -177,7 +168,7 @@
 }
 
 - (void) getData {
-    int limit = 5;
+    int limit = 15;
 //    NSString *field = @"fields=from,message,type,story,picture,link,actions,created_time,updated_time,shares,likes,object_id&";
     NSString *graphPath = [NSString stringWithFormat:@"me/home?limit=%d", limit];
     [FBRequestConnection startWithGraphPath:graphPath completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -213,8 +204,8 @@
     //                    NSLog(@"entries uniqueId : %@", entry[@"id"]);
                     }
                     self.dataArray = result[@"data"];
-                    [self.tableView reloadData];
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.tableView reloadData];
                         [self.managedContext save:NULL];
                     });
                 });

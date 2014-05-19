@@ -40,7 +40,7 @@
     loginView = [[FBLoginView alloc] initWithReadPermissions:@[@"public_profile", @"read_streams"]];
     self.documentReady = NO;
     [self initDatabase];
-    [self getData];
+
     // Do any additional setup after loading the view.
 }
 
@@ -80,36 +80,8 @@
     if (self.managedDocument.documentState == UIDocumentStateNormal) {
         self.documentReady = YES;
         self.managedContext = self.managedDocument.managedObjectContext;
-        
-//        NSMutableArray *mutableDataArray = [[NSMutableArray alloc] init];
-//        for (NSDictionary *entry in self.dataArray) {
-//            // save to Database
-//            Card *card = [Card cardWithFBData:entry inManagedObjectContext:self.managedContext];
-//                    if (!card.uniqueId) {
-//                        card.from_id = entry[@"from"][@"id"];
-//                        card.from_name = entry[@"from"][@"name"];
-//                        card.uniqueId = entry[@"id"];
-//                        card.message = entry[@"message"];
-//                        card.picture = entry[@"picture"];
-//                        card.actions_comment_link = entry[@"actions"][0][@"link"];
-//                        card.actions_like_link = entry[@"actions"][1][@"link"];
-//                        card.type = entry[@"type"];
-//                        card.status_type = entry[@"status_type"];
-//                        card.object_id = entry[@"object_id"];
-//                        card.shares_count = entry[@"shares"][@"count"];
-//                    }
-//                    else
-//                        NSLog(@"Card with uniqueId: %@ already exists", card.uniqueId);
-//                    [mutableDataArray addObject:entry];
-//            NSLog(@"entries uniqueId : %@", entry[@"id"]);
-//        }
-//        self.dataArray = mutableDataArray;
-//        [self.tableView reloadData];
+        [self getData];
     }
-}
-
-- (void) insertEntityToDatabase: (Card *) cardToInsert {
-    [NSEntityDescription insertNewObjectForEntityForName:@"Card" inManagedObjectContext:self.managedContext];
 }
 
 #pragma mark - Table view data source
@@ -143,18 +115,15 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Message Cell" forIndexPath:indexPath];
     NSInteger row = indexPath.row;
-    NSString *uid = self.dataArray[row][@"from"][@"id"];
     
     // profile picture fetching and setting
 //    if (self.managedContext) {
         Card *myCard = [Card cardWithFBData:self.dataArray[row] inManagedObjectContext:self.managedContext];
         
 //    }
-    NSString *profilePicURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=normal", uid];
     UIImageView *img = (UIImageView *)[cell viewWithTag:10];
     dispatch_queue_t myQueue = dispatch_queue_create("myQueue", NULL);
     dispatch_async(myQueue, ^{
-//        UIImage *profilePicImg = [[UIImage alloc] initWithData:[[NSData alloc] initWithContentsOfURL:[[NSURL alloc] initWithString: profilePicURL]]];
         UIImage *profilePicImg = [[UIImage alloc] initWithData:(NSData *)myCard.profilePicImg];
         dispatch_async(dispatch_get_main_queue(),^{[img setImage:profilePicImg];});
     });
@@ -175,10 +144,7 @@
     photoImgView.image = nil;
     if ([self.dataArray[row][@"type"] isEqualToString:@"photo"]) {
         dispatch_async(myQueue, ^{
-//            NSData *imgData = [[NSData alloc] initWithContentsOfURL:[[NSURL alloc] initWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture", object_id]]];
             NSData *imgData = [[NSData alloc] initWithData:myCard.picture];
-            
-            
             // alternate method to get image using _n
             //            if (!imgData) {
             //                NSMutableString *string = [[NSMutableString alloc] initWithString:self.dataArray[row][@"picture"]];
@@ -191,12 +157,6 @@
                 [photoImgView setImage:photoImg];
                 photoImgView.contentMode = UIViewContentModeScaleAspectFill;
                 [self.imageSizeArray addObject:@(photoImgView.frame.size.height)];
-                //                [self.tableView reloadData];
-                //                if (photoImgView.image.size.width < photoImgView.frame.size.width)
-                //                    [photoImgView setFrame:CGRectMake(photoImgView.frame.origin.x, photoImgView.frame.origin.y, photoImgView.image.size.width, photoImgView.image.size.height)];
-                //                else
-                //                    [photoImgView setFrame:CGRectMake(photoImgView.frame.origin.x, photoImgView.frame.origin.y, photoImgView.frame.size.width, photoImgView.image.size.height)];
-                //                [cell sizeToFit];
             });
         });
     }
@@ -217,7 +177,7 @@
 }
 
 - (void) getData {
-    int limit = 25;
+    int limit = 5;
 //    NSString *field = @"fields=from,message,type,story,picture,link,actions,created_time,updated_time,shares,likes,object_id&";
     NSString *graphPath = [NSString stringWithFormat:@"me/home?limit=%d", limit];
     [FBRequestConnection startWithGraphPath:graphPath completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -226,34 +186,38 @@
             NSLog(@"Result[data] : %@", result[@"data"]);
             dispatch_queue_t myQueue2 = dispatch_queue_create("myQueue2", NULL);
             if ([result[@"data"] isKindOfClass:[NSArray class]]) {
-                NSMutableArray *mutableDataArray = [[NSMutableArray alloc] init];
-                for (NSDictionary *entry in (NSArray *)result[@"data"]) {
-                    // save to Database
-                    Card *card = [Card cardWithFBData:entry inManagedObjectContext:self.managedContext];
-                    if (!card.uniqueId) {
-                        card.from_id = entry[@"from"][@"id"];
-                        card.from_name = entry[@"from"][@"name"];
-                        card.uniqueId = entry[@"id"];
-                        card.message = entry[@"message"];
-                        dispatch_async(myQueue2, ^{
+                dispatch_async(myQueue2, ^{
+                    NSMutableArray *mutableDataArray = [[NSMutableArray alloc] init];
+                    for (NSDictionary *entry in (NSArray *)result[@"data"]) {
+                        // save to Database
+                        Card *card = [Card cardWithFBData:entry inManagedObjectContext:self.managedContext];
+                        if (!card.uniqueId) {
+                            card.from_id = entry[@"from"][@"id"];
+                            card.from_name = entry[@"from"][@"name"];
+                            card.uniqueId = entry[@"id"];
+                            card.message = entry[@"message"];
                             card.picture = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture", entry[@"object_id"]]]];
                             card.profilePicImg = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?type=normal", entry[@"from"][@"id"]]]];
-                            NSLog(@"Loaded pics for entry : %@", entry[@"id"]);
-                        });
-                        card.actions_comment_link = entry[@"actions"][0][@"link"];
-                        card.actions_like_link = entry[@"actions"][1][@"link"];
-                        card.type = entry[@"type"];
-                        card.status_type = entry[@"status_type"];
-                        card.object_id = entry[@"object_id"];
-                        card.shares_count = entry[@"shares"][@"count"];
+                            card.actions_comment_link = entry[@"actions"][0][@"link"];
+                            if ([entry[@"actions"] count] == 2)
+                                card.actions_like_link = entry[@"actions"][1][@"link"];
+                            card.type = entry[@"type"];
+                            card.status_type = entry[@"status_type"];
+                            card.object_id = entry[@"object_id"];
+                            card.shares_count = entry[@"shares"][@"count"];
+                            NSLog(@"Inserted new card with uniqueId : %@", entry[@"id"]);
+                        }
+                        else
+                            NSLog(@"Card with uniqueId: %@ already exists", card.uniqueId);
+                        [mutableDataArray addObject:entry];
+    //                    NSLog(@"entries uniqueId : %@", entry[@"id"]);
                     }
-                    else
-                        NSLog(@"Card with uniqueId: %@ already exists", card.uniqueId);
-                    [mutableDataArray addObject:entry];
-//                    NSLog(@"entries uniqueId : %@", entry[@"id"]);
-                }
-                self.dataArray = result[@"data"];
-                [self.tableView reloadData];
+                    self.dataArray = result[@"data"];
+                    [self.tableView reloadData];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.managedContext save:NULL];
+                    });
+                });
             }
             else
                 NSLog(@"Result is not a type of NSArray in getData");

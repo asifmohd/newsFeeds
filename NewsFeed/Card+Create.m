@@ -20,13 +20,15 @@
     request.predicate = predicate;
     NSError *err;
     NSArray *cards = [context executeFetchRequest:request error:&err];
-    if (![cards count]) {
-        card = [NSEntityDescription insertNewObjectForEntityForName:@"Card" inManagedObjectContext:context];
-        NSLog(@"Created a new card for insertion");
-    }
-    else {
-        NSLog(@"Data with id %@ already exists", FBData[@"id"]);
-        card = [cards firstObject];
+    NSLog(@"Predicate is %@", predicate);
+    if (!err) {
+        if (![cards count]) {
+            card = [NSEntityDescription insertNewObjectForEntityForName:@"Card" inManagedObjectContext:context];
+        }
+        else {
+            NSLog(@"Data with id %@ already exists", FBData[@"id"]);
+            card = [cards firstObject];
+        }
     }
     return card;
 }

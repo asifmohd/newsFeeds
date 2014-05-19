@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13D65" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Card" representedClassName="Card" syncable="YES">
+        <attribute name="actions_comment_link" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="actions_like_link" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="from_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="from_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="link" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="message" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="object_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="picture" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="profilePicImg" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="shares_count" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="status_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniqueId" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Card" positionX="-45" positionY="0" width="128" height="240"/>
+    </elements>
+</model>

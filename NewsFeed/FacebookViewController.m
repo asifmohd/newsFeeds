@@ -107,11 +107,8 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Message Cell" forIndexPath:indexPath];
     NSInteger row = indexPath.row;
     
-    // profile picture fetching and setting
-//    if (self.managedContext) {
-        Card *myCard = [Card cardWithFBData:self.dataArray[row] inManagedObjectContext:self.managedContext];
-        
-//    }
+    // setup profile picture
+    Card *myCard = [Card cardWithFBData:self.dataArray[row] inManagedObjectContext:self.managedContext];
     UIImageView *img = (UIImageView *)[cell viewWithTag:10];
     dispatch_queue_t myQueue = dispatch_queue_create("myQueue", NULL);
     dispatch_async(myQueue, ^{

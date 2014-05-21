@@ -107,10 +107,10 @@
             </objects>
             <point key="canvasLocation" x="443" y="-548"/>
         </scene>
-        <!--View Controller - Twitter-->
+        <!--Twitter View Controller - Twitter-->
         <scene sceneID="9s1-5M-MwQ">
             <objects>
-                <viewController id="YYe-Dh-IQh" sceneMemberID="viewController">
+                <viewController id="YYe-Dh-IQh" customClass="TwitterViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="faQ-vJ-vcG"/>
                         <viewControllerLayoutGuide type="bottom" id="4eb-B0-FPy"/>

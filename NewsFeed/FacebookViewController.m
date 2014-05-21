@@ -165,7 +165,7 @@
 }
 
 - (void) getData {
-    int limit = 15;
+    int limit = 5;
 //    NSString *field = @"fields=from,message,type,story,picture,link,actions,created_time,updated_time,shares,likes,object_id&";
     NSString *graphPath = [NSString stringWithFormat:@"me/home?limit=%d", limit];
     [FBRequestConnection startWithGraphPath:graphPath completionHandler:^(FBRequestConnection *connection, id result, NSError *error) {

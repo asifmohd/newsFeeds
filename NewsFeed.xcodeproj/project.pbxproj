@@ -11,6 +11,7 @@
 		E00E07111928D6E100E84012 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E00E070F1928D6E100E84012 /* Model.xcdatamodeld */; };
 		E00E07171928DA5700E84012 /* Card+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = E00E07161928DA5700E84012 /* Card+Create.m */; };
 		E00E07201928EF9400E84012 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = E00E071F1928EF9400E84012 /* Card.m */; };
+		E02B0631192CFF1D00739FC1 /* TwitterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E02B0630192CFF1D00739FC1 /* TwitterViewController.m */; };
 		E046944919230F29005AB6B9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E046944819230F29005AB6B9 /* Foundation.framework */; };
 		E046944B19230F29005AB6B9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E046944A19230F29005AB6B9 /* CoreGraphics.framework */; };
 		E046944D19230F29005AB6B9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E046944C19230F29005AB6B9 /* UIKit.framework */; };
@@ -46,6 +47,8 @@
 		E00E07161928DA5700E84012 /* Card+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Card+Create.m"; sourceTree = "<group>"; };
 		E00E071E1928EF9400E84012 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
 		E00E071F1928EF9400E84012 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
+		E02B062F192CFF1D00739FC1 /* TwitterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterViewController.h; sourceTree = "<group>"; };
+		E02B0630192CFF1D00739FC1 /* TwitterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterViewController.m; sourceTree = "<group>"; };
 		E046944519230F29005AB6B9 /* NewsFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E046944819230F29005AB6B9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		E046944A19230F29005AB6B9 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -137,6 +140,8 @@
 				E00E07161928DA5700E84012 /* Card+Create.m */,
 				E09E2E1C192749AF00099B18 /* SettingsViewController.h */,
 				E09E2E1D192749AF00099B18 /* SettingsViewController.m */,
+				E02B062F192CFF1D00739FC1 /* TwitterViewController.h */,
+				E02B0630192CFF1D00739FC1 /* TwitterViewController.m */,
 				E046946019230F29005AB6B9 /* Images.xcassets */,
 				E046944F19230F29005AB6B9 /* Supporting Files */,
 			);
@@ -276,6 +281,7 @@
 				E00E07111928D6E100E84012 /* Model.xcdatamodeld in Sources */,
 				E00E07051928C93500E84012 /* FacebookViewController.m in Sources */,
 				E046945919230F29005AB6B9 /* FacebookAppDelegate.m in Sources */,
+				E02B0631192CFF1D00739FC1 /* TwitterViewController.m in Sources */,
 				E00E07171928DA5700E84012 /* Card+Create.m in Sources */,
 				E00E07201928EF9400E84012 /* Card.m in Sources */,
 				E046945519230F29005AB6B9 /* main.m in Sources */,
